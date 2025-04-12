@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class AccountService {
@@ -33,6 +32,17 @@ public class AccountService {
                 account -> account.setPaid(true),
                 () -> { throw new IllegalArgumentException("Account not found."); }
         );
+    }
+
+    public void loadSampleData() {
+        addAccount("Aluguel", 1500.00, LocalDate.now().plusDays(30), AccountType.PAYABLE);
+        addAccount("Salário", 5000.0, LocalDate.now().plusDays(5), AccountType.RECEIVABLE);
+        addAccount("Internet", 120.9, LocalDate.now().minusDays(10), AccountType.PAYABLE);
+
+        accounts.stream()
+                .filter(account -> account.getDescription().equals("Internet"))
+                .findFirst()
+                .ifPresent(account -> account.setPaid(true));
     }
 
     public Optional<Account> getAccountById(UUID accountId) {
@@ -72,16 +82,4 @@ public class AccountService {
             return "Pending";
         }).orElse("Account not found.");
     }
-
-    public void LoadSampleData() {
-        addAccount("Aluguel", 1500.00, LocalDate.now().plusDays(30), AccountType.PAYABLE);
-        addAccount("Salário", 5000.0, LocalDate.now().plusDays(5), AccountType.RECEIVABLE);
-        addAccount("Internet", 120.9, LocalDate.now().minusDays(10), AccountType.PAYABLE);
-
-        accounts.stream()
-                .filter(account -> account.getDescription().equals("Internet"))
-                .findFirst()
-                .ifPresent(account -> account.setPaid(true));
-    }
-
 }
