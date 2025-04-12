@@ -84,10 +84,4 @@ public class AccountService {
                 .ifPresent(account -> account.setPaid(true));
     }
 
-
-
-
-
-
-
 }
