@@ -24,7 +24,7 @@ public class Main {
     }
 
     private void run() {
-        accountService.LoadSampleData();
+        accountService.loadSampleData();
         showMainMenu();
     }
 
@@ -73,7 +73,7 @@ public class Main {
         );
 
         double value = Double.parseDouble(getInput(
-                "Value (ex 150.50):",
+                "Value (ex 150.50): ",
                 "Invalid Value",
                 input -> input.matches("^\\d+(\\.\\d+)?$") && Double.parseDouble(input) > 0)
         );
@@ -209,7 +209,7 @@ public class Main {
 
     private String getInput(String prompt, String errorMessage, java.util.function.Predicate<String> validator) {
         while(true) {
-            System.out.println(prompt);
+            System.out.printf(prompt);
             String input = scanner.nextLine();
 
             if(validator.test(input)){
