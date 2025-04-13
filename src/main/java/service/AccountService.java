@@ -4,10 +4,7 @@ import main.java.model.Account;
 import main.java.model.AccountType;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AccountService {
