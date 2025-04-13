@@ -48,8 +48,8 @@ public class SummaryService {
         StringBuilder report = new StringBuilder();
 
         report.append("\n=== Financial Resume ===\n");
-        report.append(String.format("Total to Pay: R$ %.2f%n", getTotalPayable()));
-        report.append(String.format("Total to Receive: R$ %.2f%n", getTotalReceivable()));
+        report.append(String.format("Payed Total: R$ %.2f%n", getTotalPayable()));
+        report.append(String.format("Received Total: R$ %.2f%n", getTotalReceivable()));
         report.append(String.format("Net Balance: R$ %.2f%n", getNetBalance()));
 
         report.append("\n--- Detailing ---\n");
