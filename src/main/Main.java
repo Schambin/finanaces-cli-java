@@ -48,9 +48,10 @@ public class Main {
                     case 1 -> addAccount();
                     case 2 -> listAllAccounts();
                     case 3 -> markAsPaid();
-                    case 4 -> searchAccountById();
-                    case 5 -> showSummary();
-                    case 6 -> {
+                    case 4 -> markAsReceived();
+                    case 5 -> searchAccountById();
+                    case 6 -> showSummary();
+                    case 7 -> {
                         System.out.println("Shutting Down...");
                         System.exit(0);
                     }
