@@ -156,6 +156,41 @@ public class Main {
         System.out.println("Account mark as paid successfully");
     }
 
+    private void markAsReceived() {
+        System.out.println("\n=== Mark Receivable as Received ===");
+        Map<Integer, Account> pendingReceivables = accountService.getNumberedPendingReceivables();
+
+        if (pendingReceivables.isEmpty()) {
+            System.out.println("No pending receivables.");
+            return;
+        }
+
+        System.out.println("Pending Receivables:");
+        pendingReceivables.forEach((id, account) ->
+                System.out.printf("%d. %s - R$ %.2f (Due: %s)\n",
+                        id,
+                        account.getDescription(),
+                        account.getValue(),
+                        account.getDueDate().format(dateFormatter))
+        );
+
+        String input = getInput(
+                "\nType the receivable NUMBER to mark as received: ",
+                "Invalid number",
+                inputStr -> {
+                    try {
+                        int num = Integer.parseInt(inputStr);
+                        return pendingReceivables.containsKey(num);
+                    } catch (NumberFormatException e) {
+                        return false;
+                    }
+                }
+        );
+
+        accountService.markAsReceived(input);
+        System.out.println("Receivable marked as received successfully!");
+    }
+
     private void showSummary() {
         System.out.println(summaryService.generateFullReport());
 
