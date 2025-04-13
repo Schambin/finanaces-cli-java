@@ -37,6 +37,16 @@ public class AccountService {
         }
     }
 
+    public void markAsReceived(String inputId) {
+        try {
+            int sequentialId = Integer.parseInt(inputId);
+            getNumberedPendingReceivables().get(sequentialId).setPaid(true);
+        } catch (NumberFormatException e) {
+            UUID accountId = UUID.fromString(inputId);
+            getAccountById(accountId).ifPresent(account -> account.setPaid(true));
+        }
+    }
+
     public void loadSampleData() {
         addAccount("Aluguel", 1500.00, LocalDate.now().plusDays(30), AccountType.PAYABLE);
         addAccount("Salário", 5000.0, LocalDate.now().plusDays(5), AccountType.RECEIVABLE);
