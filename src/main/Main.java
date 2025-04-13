@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -96,27 +97,14 @@ public class Main {
     }
 
     private void listAllAccounts() {
-        System.out.println("\n=== All Accounts ===");
+        System.out.println("\n=== Lista de Contas ===");
+        Map<Integer, Account> numberedAccounts = accountService.getNumberedPendingAccounts();
 
-        List<Account> accounts = accountService.getAllAccounts();
-
-        if(accounts.isEmpty()){
-            System.out.println("No Accounts Registered");
-            return;
-        }
-
-        System.out.printf("%-38s %-20s %-13s %-12s %-15s %-10s\n",
-                "ID", "Description", "Type", "Value", "Due Date", "Status");
-        System.out.println("-".repeat(110));
-
-        accounts.forEach(account -> {
-            String status = account.isPaid() ? "Paid" :
-                    (account.getDueDate().isBefore(LocalDate.now()) ? "Delayed" : "Pending");
-
-            System.out.printf("%-36s %-20s %-13s %-12s %-15s %-10s\n",
-                    account.getId(),
+        numberedAccounts.forEach((id, account) -> {
+            String status = account.isPaid() ? "Paid" : "Pending";
+            System.out.printf("%d. %s - R$ %.2f (Overdue: %s) %s\n",
+                    id,
                     account.getDescription(),
-                    account.getType(),
                     account.getValue(),
                     account.getDueDate().format(dateFormatter),
                     status);
@@ -124,36 +112,38 @@ public class Main {
     }
 
     private void markAsPaid() {
-        System.out.println("\n=== Mark as Paid ===");
-        List<Account> pendingAccounts = accountService.getPendingAccounts();
+        System.out.println("\n=== Mark Payable as Paid ===");
+        Map<Integer, Account> pendingPayables = accountService.getNumberedPendingPayables();
 
-        if(pendingAccounts.isEmpty()){
-            System.out.println("No account found.");
+        if (pendingPayables.isEmpty()) {
+            System.out.println("No pending accounts to pay.");
             return;
         }
 
-        System.out.println("Pending Accounts");
-        pendingAccounts.forEach(account ->
-                System.out.printf("[%s] %s - R$ %.2f (Vence: %s)\n",
-                        account.getId(),
+        System.out.println("Pending Payables:");
+        pendingPayables.forEach((id, account) ->
+                System.out.printf("%d. %s - R$ %.2f (Due: %s)\n",
+                        id,
                         account.getDescription(),
                         account.getValue(),
                         account.getDueDate().format(dateFormatter))
         );
 
-        String accountId = getInput(
-            "\nType the account ID you want to mark as paid: ",
-                "Invalid ID", input -> {
+        String input = getInput(
+                "\nType the payable NUMBER to mark as paid: ",
+                "Invalid number",
+                inputStr -> {
                     try {
-                        UUID.fromString(input);
-                        return true;
-                    } catch (IllegalArgumentException e) {
+                        int num = Integer.parseInt(inputStr);
+                        return pendingPayables.containsKey(num);
+                    } catch (NumberFormatException e) {
                         return false;
                     }
-                });
+                }
+        );
 
-        accountService.markAsPaid(UUID.fromString(accountId));
-        System.out.println("Account mark as paid successfully");
+        accountService.markAsPaid(input);
+        System.out.println("Payable marked as paid successfully!");
     }
 
     private void markAsReceived() {
