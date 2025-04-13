@@ -27,11 +27,14 @@ public class AccountService {
         return account;
     }
 
-    public void markAsPaid(UUID accountId) {
-        getAccountById(accountId).ifPresentOrElse(
-                account -> account.setPaid(true),
-                () -> { throw new IllegalArgumentException("Account not found."); }
-        );
+    public void markAsPaid(String inputId) {
+        try {
+            int sequentialId = Integer.parseInt(inputId);
+            getNumberedPendingAccounts().get(sequentialId).setPaid(true);
+        } catch (NumberFormatException e) {
+            UUID accountId = UUID.fromString(inputId);
+            getAccountById(accountId).ifPresent(account -> account.setPaid(true));
+        }
     }
 
     public void loadSampleData() {
