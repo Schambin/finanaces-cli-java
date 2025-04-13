@@ -95,4 +95,37 @@ public class AccountService {
             return "Pending";
         }).orElse("Account not found.");
     }
+
+    public Map<Integer, Account> getNumberedPendingAccounts() {
+        Map<Integer, Account> numberedAccounts = new LinkedHashMap<>();
+        int counter = 1;
+        for (Account account : accounts) {
+            if (!account.isPaid()) {
+                numberedAccounts.put(counter++, account);
+            }
+        }
+        return numberedAccounts;
+    }
+
+    public Map<Integer, Account> getNumberedPendingPayables() {
+        Map<Integer, Account> numberedAccounts = new LinkedHashMap<>();
+        int counter = 1;
+        for (Account account : accounts) {
+            if (!account.isPaid() && account.getType() == AccountType.PAYABLE) {
+                numberedAccounts.put(counter++, account);
+            }
+        }
+        return numberedAccounts;
+    }
+
+    public Map<Integer, Account> getNumberedPendingReceivables() {
+        Map<Integer, Account> numberedAccounts = new LinkedHashMap<>();
+        int counter = 1;
+        for (Account account : accounts) {
+            if (!account.isPaid() && account.getType() == AccountType.RECEIVABLE) {
+                numberedAccounts.put(counter++, account);
+            }
+        }
+        return numberedAccounts;
+    }
 }
