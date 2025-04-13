@@ -34,10 +34,11 @@ public class Main {
             System.out.println("\n=== Main Menu ===");
             System.out.println("1. Add Account");
             System.out.println("2. List Accounts");
-            System.out.println("3. Mark as Paid");
-            System.out.println("4. Search by ID");
-            System.out.println("5. Summary");
-            System.out.println("6. Exit");
+            System.out.println("3. Mark Payable as Paid");
+            System.out.println("4. Mark Receivable as Received");
+            System.out.println("5. Search by ID");
+            System.out.println("6. Summary");
+            System.out.println("7. Exit");
             System.out.print("Choose an option: ");
 
             try {
