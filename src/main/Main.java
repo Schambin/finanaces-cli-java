@@ -97,13 +97,37 @@ public class Main {
     }
 
     private void listAllAccounts() {
-        System.out.println("\n=== Lista de Contas ===");
-        Map<Integer, Account> numberedAccounts = accountService.getNumberedPendingAccounts();
+        System.out.println("\n=== All Accounts ===");
 
-        numberedAccounts.forEach((id, account) -> {
+        System.out.println("\n--- Payables ---");
+        System.out.println("Pending:");
+        printAccountList(accountService.getNumberedPendingPayables());
+
+        System.out.println("\nPaid:");
+        printAccountList(accountService.getNumberedPaidPayables());
+
+        System.out.println("\n--- Receivables ---");
+        System.out.println("Pending:");
+        printAccountList(accountService.getNumberedPendingReceivables());
+
+        System.out.println("\nReceived:");
+        printAccountList(accountService.getNumberedPaidReceivables());
+    }
+
+    private void printAccountList(Map<Integer, Account> accounts) {
+        if (accounts.isEmpty()) {
+            System.out.println("No accounts found.");
+            return;
+        }
+
+        accounts.forEach((id, account) -> {
             String status = account.isPaid() ? "Paid" : "Pending";
-            System.out.printf("%d. %s - R$ %.2f (Overdue: %s) %s\n",
+            String overdue = account.getDueDate().isBefore(LocalDate.now()) && !account.isPaid()
+                    ? "[OVERDUE] " : "";
+
+            System.out.printf("%d. %s%s - R$ %.2f (Due: %s) - %s\n",
                     id,
+                    overdue,
                     account.getDescription(),
                     account.getValue(),
                     account.getDueDate().format(dateFormatter),
@@ -200,13 +224,15 @@ public class Main {
         System.out.println("\n=== Search by ID ===");
         String accountId = getInput("Type Account ID: ",
                 "Invalid ID", input -> {
-                try {
-                    UUID.fromString(input);
-                    return true;
-                } catch (IllegalArgumentException e) {
-                    return false;
-                }});
+                    try {
+                        UUID.fromString(input);
+                        return true;
+                    } catch (IllegalArgumentException e) {
+                        return false;
+                    }
+                });
 
+        // Use findAccountById para string ou getAccountById para UUID
         accountService.getAccountById(UUID.fromString(accountId)).ifPresentOrElse(
                 account -> {
                     System.out.println("\n=== Account Found ===");
