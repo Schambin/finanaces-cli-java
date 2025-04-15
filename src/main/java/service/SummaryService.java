@@ -59,4 +59,10 @@ public class SummaryService {
 
         return report.toString();
     }
+
+    private double calculateTotal(Iterable<Account> accounts) {
+        return StreamSupport.stream(accounts.spliterator(), false)
+                .mapToDouble(Account::getValue)
+                .sum();
+    }
 }
