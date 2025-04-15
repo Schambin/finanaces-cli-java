@@ -40,10 +40,6 @@ public class SummaryService {
                 .toList());
     }
 
-    private double calculateTotal(List<Account> accounts) {
-        return accounts.stream().mapToDouble(Account::getValue).sum();
-    }
-
     public String generateFullReport() {
         StringBuilder report = new StringBuilder();
 
