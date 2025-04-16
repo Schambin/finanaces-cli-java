@@ -69,6 +69,50 @@ public class AccountService {
         }
     }
 
+    public Map<Integer, Account> getNumberedPendingPayables() {
+        return getNumberedAccounts(account ->
+                !account.isPaid() && account.getType() == AccountType.PAYABLE);
+    }
+
+    public Map<Integer, Account> getNumberedPendingReceivables() {
+        return getNumberedAccounts(account ->
+                !account.isPaid() && account.getType() == AccountType.RECEIVABLE);
+    }
+
+    public Map<Integer, Account> getNumberedPaidAccounts() {
+        return getNumberedAccounts(Account::isPaid);
+    }
+
+    private Map<Integer, Account> getNumberedAccounts(Predicate<Account> filter) {
+        Map<Integer, Account> numberedAccounts = new LinkedHashMap<>();
+        int counter = 1;
+
+        for (Account account : accounts) {
+            if (filter.test(account)) {
+                numberedAccounts.put(counter++, account);
+            }
+        }
+
+        return numberedAccounts;
+    }
+
+    public Map<Integer, Account> getNumberedPaidPayables() {
+        return getNumberedAccounts(account ->
+                account.isPaid() && account.getType() == AccountType.PAYABLE);
+    }
+
+    public Map<Integer, Account> getNumberedPaidReceivables() {
+        return getNumberedAccounts(account ->
+                account.isPaid() && account.getType() == AccountType.RECEIVABLE);
+    }
+
+    public Optional<Account> getAccountById(UUID accountId) {
+        return accounts.stream()
+                .filter(account -> account.getId().equals(accountId))
+                .findFirst();
+    }
+
+    // aux methods
     public void loadSampleData() {
         addAccount("Aluguel", 1500.00, LocalDate.now().plusDays(30), AccountType.PAYABLE);
         addAccount("Salário", 5000.0, LocalDate.now().plusDays(5), AccountType.RECEIVABLE);
