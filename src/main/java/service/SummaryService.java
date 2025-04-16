@@ -26,11 +26,11 @@ public class SummaryService {
     }
 
     public double getPendingTotalByType(AccountType type) {
-        return calculateTotal(accountService
-                .getPendingAccounts()
-                .stream()
-                .filter(account -> account.getType() == type)
-                .toList());
+        if (type == AccountType.PAYABLE) {
+            return calculateTotal(accountService.getNumberedPendingPayables().values());
+        } else {
+            return calculateTotal(accountService.getNumberedPendingReceivables().values());
+        }
     }
 
     public double getOverdueTotalByType(AccountType type) {
