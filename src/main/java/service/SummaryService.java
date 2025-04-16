@@ -3,7 +3,6 @@ package main.java.service;
 import main.java.model.Account;
 import main.java.model.AccountType;
 
-import java.util.List;
 import java.util.stream.StreamSupport;
 
 public class SummaryService {
