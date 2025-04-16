@@ -28,6 +28,28 @@ public class AccountService {
 
     // status mark methods
     public void markAsPaid(String inputId) {
+        updatePaymentStatus(inputId, AccountType.PAYABLE);
+    }
+
+    public void markAsReceived(String inputId) {
+        updatePaymentStatus(inputId, AccountType.RECEIVABLE);
+    }
+
+    private void updatePaymentStatus(String inputId, AccountType expectedType) {
+        Account account = findAccountById(inputId)
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
+        if (account.getType() != expectedType) {
+            throw new IllegalArgumentException(
+                    String.format("This is a %s account, expected %s",
+                            account.getType(), expectedType));
+        }
+
+        account.setPaid(true);
+    }
+
+    // search methods
+    public Optional<Account> findAccountById(String id) {
         try {
             int sequentialId = Integer.parseInt(inputId);
             getNumberedPendingAccounts().get(sequentialId).setPaid(true);
