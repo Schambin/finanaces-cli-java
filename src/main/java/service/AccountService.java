@@ -130,12 +130,9 @@ public class AccountService {
     }
 
     public String getAccountStatus(UUID accountId) {
-        return getAccountById(accountId).map(account -> {
-            if(account.isPaid()) {
-                return "Paid";
-            } else if(account.getDueDate().isBefore(LocalDate.now())){
-                return "Overdue";
-            }
+        return findAccountById(accountId.toString()).map(account -> {  // Alterado aqui
+            if (account.isPaid()) return "Paid";
+            if (account.getDueDate().isBefore(LocalDate.now())) return "Overdue";
             return "Pending";
         }).orElse("Account not found.");
     }
