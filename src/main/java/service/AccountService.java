@@ -11,19 +11,22 @@ public class AccountService {
     private final List<Account> accounts = new ArrayList<>();
 
     public Account addAccount(String description, double value, LocalDate dueDate, AccountType type) {
-        if(value <= 0){
-            throw new IllegalArgumentException("Value must be positive.");
-        }
-
-        if(description == null || description.trim().isEmpty()) {
-            throw new IllegalArgumentException("Description cant be empty.");
-        }
-
+        validateAccountInput(description, value);
         Account account = new Account(description, value, dueDate, type);
         accounts.add(account);
         return account;
     }
 
+    private void validateAccountInput(String description, double value) {
+        if (value <= 0) {
+            throw new IllegalArgumentException("Value must be positive.");
+        }
+        if (description == null || description.trim().isEmpty()) {
+            throw new IllegalArgumentException("Description can't be empty.");
+        }
+    }
+
+    // status mark methods
     public void markAsPaid(String inputId) {
         try {
             int sequentialId = Integer.parseInt(inputId);
