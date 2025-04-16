@@ -40,19 +40,17 @@ public class SummaryService {
     }
 
     public String generateFullReport() {
-        StringBuilder report = new StringBuilder();
 
-        report.append("\n=== Financial Resume ===\n");
-        report.append(String.format("Payed Total: R$ %.2f%n", getTotalPayable()));
-        report.append(String.format("Received Total: R$ %.2f%n", getTotalReceivable()));
-        report.append(String.format("Net Balance: R$ %.2f%n", getNetBalance()));
+        String report = "\n=== FINANCIAL SUMMARY ===\n" +
+                String.format("Total to Pay: R$ %.2f%n", getTotalPayable()) +
+                String.format("Total to Receive: R$ %.2f%n", getTotalReceivable()) +
+                String.format("Net Balance: R$ %.2f%n", getNetBalance()) +
+                "\n--- Details ---\n" +
+                String.format("Pending Payables: R$ %.2f%n", getPendingTotalByType(AccountType.PAYABLE)) +
+                String.format("Pending Receivables: R$ %.2f%n", getPendingTotalByType(AccountType.RECEIVABLE)) +
+                String.format("Overdue Payables: R$ %.2f%n", getOverdueTotalByType(AccountType.PAYABLE));
 
-        report.append("\n--- Detailing ---\n");
-        report.append(String.format("Pending Pays: R$ %.2f%n", getPendingTotalByType(AccountType.PAYABLE)));
-        report.append(String.format("Pending Receives: R$ %.2f%n", getPendingTotalByType(AccountType.RECEIVABLE)));
-        report.append(String.format("Pay Overdue: R$ %.2f%n", getOverdueTotalByType(AccountType.PAYABLE)));
-
-        return report.toString();
+        return report;
     }
 
     private double calculateTotal(Iterable<Account> accounts) {
