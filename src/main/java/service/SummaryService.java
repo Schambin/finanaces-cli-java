@@ -34,9 +34,7 @@ public class SummaryService {
     }
 
     public double getOverdueTotalByType(AccountType type) {
-        return calculateTotal(accountService
-                .getOverdueAccounts()
-                .stream()
+        return calculateTotal(accountService.getOverdueAccounts().stream()
                 .filter(account -> account.getType() == type)
                 .toList());
     }
