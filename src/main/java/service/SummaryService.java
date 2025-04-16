@@ -14,7 +14,7 @@ public class SummaryService {
     }
 
     public double getTotalPayable() {
-        return calculateTotal(accountService.getAccountsByType(AccountType.PAYABLE));
+        return calculateTotal(accountService.getNumberedAccountsByType(AccountType.PAYABLE).values());
     }
 
     public double getTotalReceivable() {
