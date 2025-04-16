@@ -6,6 +6,7 @@ import main.java.model.AccountType;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.function.Predicate;
 
 public class AccountService {
     private final List<Account> accounts = new ArrayList<>();
