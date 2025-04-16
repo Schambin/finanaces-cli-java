@@ -51,22 +51,30 @@ public class AccountService {
     // search methods
     public Optional<Account> findAccountById(String id) {
         try {
-            int sequentialId = Integer.parseInt(inputId);
-            getNumberedPendingAccounts().get(sequentialId).setPaid(true);
+            int sequentialId = Integer.parseInt(id);
+            return Optional.ofNullable(getAllNumberedAccounts().get(sequentialId));
         } catch (NumberFormatException e) {
-            UUID accountId = UUID.fromString(inputId);
-            getAccountById(accountId).ifPresent(account -> account.setPaid(true));
+            try {
+                UUID uuid = UUID.fromString(id);
+                return accounts.stream()
+                        .filter(account -> account.getId().equals(uuid))
+                        .findFirst();
+            } catch (IllegalArgumentException ex) {
+                return Optional.empty();
+            }
         }
     }
 
-    public void markAsReceived(String inputId) {
-        try {
-            int sequentialId = Integer.parseInt(inputId);
-            getNumberedPendingReceivables().get(sequentialId).setPaid(true);
-        } catch (NumberFormatException e) {
-            UUID accountId = UUID.fromString(inputId);
-            getAccountById(accountId).ifPresent(account -> account.setPaid(true));
-        }
+    public Map<Integer, Account> getAllNumberedAccounts() {
+        return getNumberedAccounts(account -> true);
+    }
+
+    public Map<Integer, Account> getNumberedAccountsByType(AccountType type) {
+        return getNumberedAccounts(account -> account.getType() == type);
+    }
+
+    public Map<Integer, Account> getNumberedPendingAccounts() {
+        return getNumberedAccounts(account -> !account.isPaid());
     }
 
     public Map<Integer, Account> getNumberedPendingPayables() {
