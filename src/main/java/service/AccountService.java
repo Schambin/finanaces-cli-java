@@ -116,31 +116,9 @@ public class AccountService {
     public void loadSampleData() {
         addAccount("Aluguel", 1500.00, LocalDate.now().plusDays(30), AccountType.PAYABLE);
         addAccount("Salário", 5000.0, LocalDate.now().plusDays(5), AccountType.RECEIVABLE);
-        addAccount("Internet", 120.9, LocalDate.now().minusDays(10), AccountType.PAYABLE);
 
-        accounts.stream()
-                .filter(account -> account.getDescription().equals("Internet"))
-                .findFirst()
-                .ifPresent(account -> account.setPaid(true));
-    }
-
-    public Optional<Account> getAccountById(UUID accountId) {
-        return accounts.stream().filter(
-        account -> account.getId().equals(accountId)).findFirst();
-    }
-
-    public List<Account> getAllAccounts() {
-        return new ArrayList<>(accounts);
-    }
-
-    public List<Account> getAccountsByType(AccountType type) {
-        return accounts.stream()
-            .filter(account -> account.getType() == type).collect(Collectors.toList());
-    }
-
-    public List<Account> getPendingAccounts() {
-        return accounts.stream()
-            .filter(account -> !account.isPaid()).collect(Collectors.toList());
+        Account internet = addAccount("Internet", 120.9, LocalDate.now().minusDays(10), AccountType.PAYABLE);
+        internet.setPaid(true);
     }
 
     public List<Account> getOverdueAccounts() {
