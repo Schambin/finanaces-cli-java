@@ -18,7 +18,7 @@ public class SummaryService {
     }
 
     public double getTotalReceivable() {
-        return calculateTotal(accountService.getAccountsByType(AccountType.RECEIVABLE));
+        return calculateTotal(accountService.getNumberedAccountsByType(AccountType.RECEIVABLE).values());
     }
 
     public double getNetBalance() {
